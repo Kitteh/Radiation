@@ -1,0 +1,13 @@
+name: Radiation
+
+main: com.seriousminecraft.Radiation.RadiationPlugin
+
+version: 1.0
+
+authors:
+    - Kitteh
+
+commands:
+    radiation:
+        description: Configure radiation regions
+        usage: /radiation [add|set|delete] [RegionName]
