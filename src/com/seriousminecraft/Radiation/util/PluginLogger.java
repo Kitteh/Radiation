@@ -48,8 +48,8 @@ public class PluginLogger{
 		}
 	}
 	
-	public static void criticalError(String msg){
-		Messenger.consoleMessage(LogType.ERROR + " " + msg);
-		log(LogType.ERROR,msg);
+	public static void criticalError(Exception e){
+		Messenger.consoleMessage(LogType.ERROR + " " + e.getMessage());
+		log(LogType.ERROR,e.getStackTrace().toString());
 	}
 }

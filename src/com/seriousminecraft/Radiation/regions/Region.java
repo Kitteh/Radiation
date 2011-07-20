@@ -14,12 +14,12 @@ public class Region{
 	}
 	public Region(String s,int x1, int y1, int z1, int x2, int y2, int z2){
 		name = s;
-		xyzA[0] = (long) x1;
-		xyzA[1] = (long) y1;
-		xyzA[2] = (long) z1;
-		xyzB[0] = (long) x2;
-		xyzB[1] = (long) y2;
-		xyzB[2] = (long) z2;
+		xyzA[0] = x1;
+		xyzA[1] = y1;
+		xyzA[2] = z1;
+		xyzB[0] = x2;
+		xyzB[1] = y2;
+		xyzB[2] = z2;
 		init();
 	}
 	

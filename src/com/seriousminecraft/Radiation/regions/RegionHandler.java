@@ -7,6 +7,7 @@ import java.util.LinkedHashSet;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.util.Vector;
 
 import com.alta189.sqlLibrary.SQLite.sqlCore;
 import com.seriousminecraft.Radiation.player.PlayerHandler;
@@ -23,8 +24,9 @@ public class RegionHandler {
 	}
 	
 	public boolean contains(Location l){
+		Vector v = l.toVector();
 		for(Region r: regions){
-			if(r.contains(l.toVector()))
+			if(r.contains(v))
 				return true;
 		}
 		return false;
@@ -37,25 +39,23 @@ public class RegionHandler {
 	        regions.add(r);
     	}catch(Exception e){
     		Messenger.messagePlayer(p, "Region save unsuccessful");
-    		Messenger.consoleMessage("Error : " + e.getMessage());
-    		e.printStackTrace();
+    		PluginLogger.criticalError(e);
     	}finally{
     		database.close();
     	}
     }
 	
 	private String regionToSQL(Region r) {
-		database.initialize();
-			String sql = "INSERT INTO regions (name, x1, y1, z1, x2, y2, z2) VALUES("
-						+ r.getName() + ","
-						+ r.xyzA[0] + ","
-						+ r.xyzA[1] + ","
-						+ r.xyzA[2] + ","
-						+ r.xyzB[0] + ","
-						+ r.xyzB[1] + ","
-						+ r.xyzB[2]
-						+ ")";
-			return sql;
+		String sql = "INSERT INTO regions (name, x1, y1, z1, x2, y2, z2) VALUES("
+					+ "'" + r.getName() + "',"
+					+ "'" + r.xyzA[0] + "',"
+					+ "'" + r.xyzA[1] + "',"
+					+ "'" + r.xyzA[2] + "',"
+					+ "'" + r.xyzB[0] + "',"
+					+ "'" + r.xyzB[1] + "',"
+					+ "'" + r.xyzB[2]
+					+ "');";
+		return sql;
 	}
 			
 
@@ -77,7 +77,7 @@ public class RegionHandler {
             regions.add(r);
 		}
 		}catch(SQLException e){
-			PluginLogger.criticalError(e.getMessage());
+			PluginLogger.criticalError(e);
 		}finally{
 			db.close();
 		}

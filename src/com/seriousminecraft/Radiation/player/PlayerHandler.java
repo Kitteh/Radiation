@@ -1,8 +1,10 @@
 package com.seriousminecraft.Radiation.player;
 
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 public class PlayerHandler {
 	private static final HashMap<Player, Boolean> regionSetters = new HashMap<Player, Boolean>();
@@ -31,9 +33,9 @@ public class PlayerHandler {
 		return regionSetters.get(p);
 	}
 	
-	public static boolean checkRad(Player p){
+	public static boolean checkLastRad(Player p){
 		if (radiationPlayers.containsKey(p)){
-			return radiationPlayers.get(p).checkRad();
+			return radiationPlayers.get(p).checkLastRad();
 		}else{
 			addRadiationPlayer(p);
 			return false;
@@ -42,5 +44,40 @@ public class PlayerHandler {
 	
 	public static void addRadiationPlayer(Player p){
 		radiationPlayers.put(p, new RadiationPlayer());
+	}
+	
+	
+	public synchronized static void updateRadiationLevels(){
+		for (Entry<Player, RadiationPlayer> entry : radiationPlayers.entrySet()){
+			entry.getValue().checkRadLevel(entry.getKey());
+		}
+	}
+	
+	public static RadiationPlayer getPlayer(Player p){
+		return radiationPlayers.get(p);
+	}
+	
+	public static void intilize(Plugin plugin){
+		Player[] playerList = plugin.getServer().getOnlinePlayers();
+		for (Player p : playerList){
+			addRadiationPlayer(p);
+		}
+	}
+
+	public static void clear() {
+		radiationPlayers.clear();
+	}
+	
+	/**
+	 * Quick Fix find player by name (used in commandExecutor)
+	 * this is a brute force search
+	 */
+	
+	public static RadiationPlayer getRadiationByName(Player p){
+		for (Entry<Player, RadiationPlayer> entry :radiationPlayers.entrySet()){
+			if (entry.getKey().getName().equals(p.getName()))
+				return entry.getValue();
+		}
+		return null;
 	}
 }

@@ -1,5 +1,11 @@
 Info:
-    Version: 1.0
+    Version: 1.1
 Settings:
     RadiationInterval: 10
     RadiationDamage: 1
+    RadiationChecker: 60
+    RadiationCounter: 20
+    RadiationThreshold: 100
+    RadAwayItemID: 353
+    RadAwayAmount: 100
+    GlobalFallout: false
