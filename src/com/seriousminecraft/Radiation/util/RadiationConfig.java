@@ -14,10 +14,14 @@ public class RadiationConfig {
 	public static int radiationCounter;
 	public static int radiationThreshold;
 	public static boolean permissionEnabled;
+	
 	public static boolean falloutMode;
+	public static String radiationWorld;
 	
 	public static int radAwayItemID;
 	public static int radAwayAmount;
+	
+	public static boolean exemptPlayers;
 	
 	public static void setConfig(Configuration c){
 		config = c;
@@ -26,12 +30,14 @@ public class RadiationConfig {
 	public static void setupConfig(){
 		config.load();
 		checkVersion(config.getDouble("Info.Version", 0));
+		radiationWorld = config.getString("Settings.RadiationWorld", "all");
 		radiationInterval = config.getInt("Settings.RadiationInterval", 10);
 		radiationDamage = config.getInt("Settings.RadiationDamage", 1);
 		radiationChecker = config.getInt("Settings.RadiationChecker", 60);
 		radiationCounter = config.getInt("Settings.RadiationCounter", 20);
 		radiationThreshold = config.getInt("Settings.RadiationThreshold", 100);
 		falloutMode = config.getBoolean("Settings.GlobalFallout", false);
+	    exemptPlayers = config.getBoolean("Settings.ExemptPlayers", false);
 		
 		//AntiRad items
 		radAwayItemID = config.getInt("Settings.RadAwayItemID", 353);
@@ -56,6 +62,16 @@ public class RadiationConfig {
 			config.setProperty("Settings.GlobalFallout", false);
 			config.setProperty("Settings.RadAwayItemID", 353);
 			config.setProperty("Setings.RadAwayAmount", 100);
+			config.setProperty("Info.Version", version);
+			config.save();
+			Messenger.consoleMessage("Config version updated - " + version);
+			return true;
+		}
+		//update 1.1 -> 1.2
+		if (d == 1.1){
+			config.load();
+			config.setProperty("Settings.RadiationWorld", "all");
+			config.setProperty("ExemptPlayers", false);
 			config.setProperty("Info.Version", version);
 			config.save();
 			Messenger.consoleMessage("Config version updated - " + version);

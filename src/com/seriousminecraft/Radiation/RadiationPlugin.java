@@ -10,6 +10,7 @@ import com.alta189.sqlLibrary.SQLite.sqlCore;
 import com.nijiko.permissions.PermissionHandler;
 import com.nijikokun.bukkit.Permissions.Permissions;
 import com.seriousminecraft.Radiation.listeners.RadiationBlockListener;
+import com.seriousminecraft.Radiation.listeners.RadiationEntityListener;
 import com.seriousminecraft.Radiation.listeners.RadiationPlayerListener;
 import com.seriousminecraft.Radiation.player.PlayerHandler;
 import com.seriousminecraft.Radiation.player.RadiationTicker;
@@ -41,10 +42,12 @@ public class RadiationPlugin extends JavaPlugin{
 		
 		RadiationPlayerListener playerListener = new RadiationPlayerListener(this);
 		RadiationBlockListener blockListener = new RadiationBlockListener(this);
+		RadiationEntityListener entityListener = new RadiationEntityListener();
 		
 		getServer().getPluginManager().registerEvent(Type.PLAYER_MOVE, playerListener, Priority.Monitor, this);
 		getServer().getPluginManager().registerEvent(Type.BLOCK_DAMAGE, blockListener, Priority.Low, this);
 		getServer().getPluginManager().registerEvent(Type.PLAYER_INTERACT, playerListener, Priority.Normal, this);
+		getServer().getPluginManager().registerEvent(Type.ENTITY_DEATH, entityListener, Priority.Monitor, this);
 		
 		RadiationConfig.version = Double.parseDouble(getDescription().getVersion());
 		PluginLogger.setupLogger("plugins/" + getDescription().getName(), "/log.txt");

@@ -1,5 +1,5 @@
 Info:
-    Version: 1.1
+    Version: 1.2
 Settings:
     RadiationInterval: 10
     RadiationDamage: 1
@@ -9,3 +9,5 @@ Settings:
     RadAwayItemID: 353
     RadAwayAmount: 100
     GlobalFallout: false
+    RadiationWorld: all
+    ExemptPlayers: false

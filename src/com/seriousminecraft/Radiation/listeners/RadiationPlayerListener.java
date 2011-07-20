@@ -22,6 +22,14 @@ public class RadiationPlayerListener extends PlayerListener {
 
 	@Override
 	public void onPlayerMove(PlayerMoveEvent e) {
+		if (RadiationConfig.exemptPlayers && RadiationPlugin.permissionHandler!=null){
+			if (RadiationPlugin.permissionHandler.has(e.getPlayer(), "Radiation.Exempt"))
+				return;
+		}
+		if (RadiationConfig.falloutMode && !RadiationConfig.radiationWorld.equalsIgnoreCase("all")){
+			if (e.getPlayer().getWorld().equals(RadiationConfig.radiationWorld))
+				return;
+		}
 		if (RadiationConfig.falloutMode) {
 			if (!radiationPlugin.regionHandler.contains(e.getPlayer()
 					.getLocation())) {

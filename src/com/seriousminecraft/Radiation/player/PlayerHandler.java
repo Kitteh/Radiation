@@ -45,7 +45,9 @@ public class PlayerHandler {
 	public static void addRadiationPlayer(Player p){
 		radiationPlayers.put(p, new RadiationPlayer());
 	}
-	
+	public static void removeRadiationPlayer(Player p){
+		radiationPlayers.remove(p);
+	}
 	
 	public synchronized static void updateRadiationLevels(){
 		for (Entry<Player, RadiationPlayer> entry : radiationPlayers.entrySet()){
