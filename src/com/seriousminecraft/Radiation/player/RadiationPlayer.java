@@ -2,6 +2,7 @@ package com.seriousminecraft.Radiation.player;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import com.seriousminecraft.Radiation.util.Messenger;
 import com.seriousminecraft.Radiation.util.RadiationConfig;
@@ -19,8 +20,10 @@ public class RadiationPlayer {
 	
 	public void increaseRadiation(Player p){
 		lastRad = System.currentTimeMillis();
-		radiationLevel += RadiationConfig.radiationCounter;
-		p.sendMessage(ChatColor.DARK_RED + "+" + ChatColor.DARK_GREEN + RadiationConfig.radiationCounter 
+		int newRad = radProtect(p,RadiationConfig.radiationCounter);
+		radiationLevel += newRad;
+		if (newRad != 0)
+			p.sendMessage(ChatColor.DARK_RED + "+" + ChatColor.DARK_GREEN + newRad
 				+ ChatColor.GREEN + " rads");
 	}
 
@@ -41,8 +44,55 @@ public class RadiationPlayer {
 		Messenger.messagePlayer(p, msg);
 	}
 	
+	/**
+	 * Display radiation level for a player
+	 * @param p Player
+	 */
 	public void displayRadiation(Player p){
 		Messenger.messagePlayer(p, 
 				ChatColor.GREEN + "Current Rad level : " + ChatColor.WHITE + radiationLevel);
+	}
+	
+	/**
+	 * Reduce the radiation given to a player through
+	 * Radiation armor
+	 * @param p Player
+	 * @param rad Radiation Damage
+	 * @return
+	 */
+	private int radProtect(Player p, int rad){
+		if (rad <= 0)
+			return 0;
+		else{
+			int newAmount = rad;
+			ItemStack[] armor = p.getInventory().getArmorContents();
+			for (int i=0;i<armor.length;i++){
+				if (RadiationConfig.radProtectItems.containsKey(armor[i].getTypeId())){
+					short damage = (short) (armor[i].getDurability() + 10 < 100 ? armor[i].getDurability() + 10 : 100);
+					newAmount -= RadiationConfig.radProtectItems.get(armor[i].getTypeId());
+					if (damage < 100){
+						armor[i].setDurability(damage);
+					}else{
+						p.getInventory().setArmorContents(removeItemFromSet(armor,armor[i]));
+					}
+				}
+			}
+			return newAmount > 0 ? newAmount : 0; 
+		}
+	}
+	
+	/**
+	 * Remove an item from an ArmorSet
+	 * 
+	 * @param a ItemStack of ArmorSet
+	 * @param r ItemStack to remove
+	 * @return
+	 */
+	private ItemStack[] removeItemFromSet(ItemStack[] a, ItemStack r){
+		ItemStack[] armor = new ItemStack[4];
+		for (int i=0;i<a.length;i++){
+			armor[i] = a[i] == r ? null : a[i];
+		}
+		return armor;
 	}
 }

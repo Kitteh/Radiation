@@ -1,6 +1,11 @@
 package com.seriousminecraft.Radiation.util;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import org.bukkit.util.config.Configuration;
+import org.bukkit.util.config.ConfigurationNode;
 
 public class RadiationConfig {
 
@@ -20,6 +25,7 @@ public class RadiationConfig {
 	
 	public static int radAwayItemID;
 	public static int radAwayAmount;
+	public static HashMap<Integer,Integer> radProtectItems = new HashMap<Integer,Integer>();
 	
 	public static boolean exemptPlayers;
 	
@@ -42,6 +48,13 @@ public class RadiationConfig {
 		//AntiRad items
 		radAwayItemID = config.getInt("Settings.RadAwayItemID", 353);
 		radAwayAmount = config.getInt("Settings.RadAwayAmount", 100);
+		
+		Map<String, ConfigurationNode> radItemNode = config.getNodes("ProtectItems");
+		if (radItemNode!=null)
+		for (Entry<String,ConfigurationNode> entry : radItemNode.entrySet()){
+			ConfigurationNode node = entry.getValue();
+			radProtectItems.put(node.getInt("ItemID", 314), node.getInt("Amount", 5));	
+		}
 	}
 	
 	public static boolean checkVersion(double d){
@@ -68,10 +81,27 @@ public class RadiationConfig {
 			return true;
 		}
 		//update 1.1 -> 1.2
-		if (d == 1.1){
+		else if (d == 1.1){
 			config.load();
 			config.setProperty("Settings.RadiationWorld", "all");
 			config.setProperty("ExemptPlayers", false);
+			config.setProperty("Info.Version", version);
+			config.save();
+			Messenger.consoleMessage("Config version updated - " + version);
+			return true;
+		}
+		
+		//update 1.2 -> 1.3
+		else if (d == 1.2){
+			config.setProperty("ProtectItems", "");
+			config.setProperty("ProtectItems.GoldHelmet.ItemID", 314);
+			config.setProperty("ProtectItems.GoldHelmet.Amount", 3);
+			config.setProperty("ProtectItems.GoldChest.ItemID", 315);
+			config.setProperty("ProtectItems.GoldChest.Amount", 10);
+			config.setProperty("ProtectItems.GoldLegs.ItemID", 316);
+			config.setProperty("ProtectItems.GoldLegs.Amount", 10);
+			config.setProperty("ProtectItems.GoldBoots.ItemID", 317);
+			config.setProperty("ProtectItems.GoldBoots.Amount", 2);
 			config.setProperty("Info.Version", version);
 			config.save();
 			Messenger.consoleMessage("Config version updated - " + version);

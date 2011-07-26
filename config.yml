@@ -1,5 +1,5 @@
 Info:
-    Version: 1.2
+    Version: 1.3
 Settings:
     RadiationInterval: 10
     RadiationDamage: 1
@@ -11,3 +11,19 @@ Settings:
     GlobalFallout: false
     RadiationWorld: all
     ExemptPlayers: false
+ProtectItems:
+    GoldHelmet:
+        ItemID: 314
+        Amount: 3
+    
+    GoldChest:
+        ItemID: 315
+        Amount: 15
+        
+    GoldLegs:
+        ItemID: 316
+        Amount: 10
+    
+    GoldBoots:
+        ItemID: 317
+        Amount: 2
